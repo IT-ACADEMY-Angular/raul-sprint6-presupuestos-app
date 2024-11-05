@@ -1,27 +1,50 @@
-# PresupuestosApp
+# Sprint 6 IT Academy | Angular
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.10.
+## 📄 Descripción
 
-## Development server
+Práctica donde el objetivo principal era hacer una App de Presupuestos con Angular.
+Completados todos los ejercicios que se pedían.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 📋 Requisitos
 
-## Code scaffolding
+- Npm instalado en tu sistema.
+- Node instalado en tu sistema.
+- Visual Studio Code (Recomendado)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## 🛠️ Instalación
 
-## Build
+1. Clona este repositorio
+```bash
+$ git clone https://github.com/IT-ACADEMY-Angular/raul-sprint6-presupuestos-app.git
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+2. Unlink el repositorio para no modificar mi trabajo.
 
-## Running unit tests
+```bash
+$ git remote rm origin
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+3. Instalar las dependencias con npm 
 
-## Running end-to-end tests
+```bash
+$ npm install
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+4. Inicializar el servidor para ver la web 
 
-## Further help
+```bash
+$ ng serve -o
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 💻 Tecnologías y Recursos Utilizados
+
+- ANGULAR
+- TYPESCRIPT
+- HTML
+- CSS
+- ...
+
+## ✨ Características
+
+- Cada ejercicio está en un commit
+... LOADING, lo iré rellenando
