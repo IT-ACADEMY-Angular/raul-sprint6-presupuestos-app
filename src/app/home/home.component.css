@@ -1,0 +1,16 @@
+.main-title {
+    font-weight: bolder;
+    font-size: 40px;
+}
+
+.main-text {
+    font-size: 20px;
+    font-weight: bold;
+    color: #585858;
+    max-width: 90%;
+}
+
+.price-title {
+    font-weight: bolder;
+    font-size: 60px;
+}
