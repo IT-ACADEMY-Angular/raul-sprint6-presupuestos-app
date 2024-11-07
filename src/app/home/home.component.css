@@ -1,16 +1,33 @@
+.budget-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.description-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 40%;
+
+}
+
 .main-title {
     font-weight: bolder;
     font-size: 40px;
+    margin: 0;
 }
 
 .main-text {
     font-size: 20px;
     font-weight: bold;
     color: #585858;
-    max-width: 90%;
+    margin: 0;
 }
 
 .price-title {
     font-weight: bolder;
     font-size: 60px;
+    margin: 0;
 }

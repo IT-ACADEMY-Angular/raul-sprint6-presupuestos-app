@@ -8,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './welcome.component.css'
 })
 export class WelcomeComponent {
-
+  title: string = 'Frontender.itacademy';
+  subtitle: string = 'Consigue la mejor calidad';
 }

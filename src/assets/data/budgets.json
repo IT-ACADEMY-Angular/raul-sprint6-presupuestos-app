@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Optimización (SEO)",
+    "description": "Optimización del sitio web para mejorar la visibilidad en buscadores",
+    "price": 300
+  },
+  {
+    "name": "Publicidad Digital (ADS)",
+    "description": "Gestión y optimización de campañas publicitarias online",
+    "price": 400
+  },
+  {
+    "name": "Desarrollo (WEB)",
+    "description": "Creación de un sitio web con diseño adaptable a dispositivos móviles",
+    "price": 500
+  }
+]
