@@ -4,6 +4,7 @@
 
 Práctica donde el objetivo principal era hacer una App de Presupuestos con Angular.
 Completados todos los ejercicios que se pedían.
+Validaciones complejas en añadir páginas/idiomas.
 
 ## 📋 Requisitos
 
@@ -42,7 +43,8 @@ $ ng serve -o
 - TYPESCRIPT
 - HTML
 - CSS
-- ...
+- RXJS
+- ReactiveForms
 
 ## ✨ Características
 
