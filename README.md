@@ -2,9 +2,7 @@
 
 ## 📄 Descripción
 
-Práctica donde el objetivo principal era hacer una App de Presupuestos con Angular.
-Completados todos los ejercicios que se pedían.
-Validaciones complejas en añadir páginas/idiomas.
+Práctica donde el objetivo principal era hacer una App de Presupuestos con Angular y Bootstrap en maquetación.
 
 ## 📋 Requisitos
 
@@ -48,5 +46,8 @@ $ ng serve -o
 
 ## ✨ Características
 
-- Cada ejercicio está en un commit
-... LOADING, lo iré rellenando
+- Cada ejercicio está en un commit.
+- Completados todos los ejercicios que se pedían.
+- He creado la maquetación con Bootstrap, para practicarlo y hasta que punto podía llegar esta herramienta (sorprendido!).
+- He querido que toda la lógica estuviese en el servicio, para así llamar a las funciones en los componentes, buenas prácticas.
+- Apartado de validaciones, es lo que mas me ha costado, son complejas. En el apartado de añadir páginas/idiomas.
