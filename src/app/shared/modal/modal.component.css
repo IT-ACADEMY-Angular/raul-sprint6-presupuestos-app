@@ -1,0 +1,10 @@
+/* modal.component.css */
+.modal.fade.show {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal-dialog-centered {
+    max-width: 500px;
+  }
+  
