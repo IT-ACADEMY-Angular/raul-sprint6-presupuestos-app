@@ -10,7 +10,6 @@
     flex-direction: column;
     justify-content: center;
     max-width: 40%;
-
 }
 
 .main-title {
@@ -30,4 +29,20 @@
     font-weight: bolder;
     font-size: 60px;
     margin: 0;
+}
+
+input::placeholder {
+  color: #c5c5c5;
+}
+
+.presupuesto-text {
+  font-weight: bold;
+  font-size: larger;
+}
+
+.hr-line {
+  border: none;
+  border-top: 6px dashed #868686;
+  width: 75%;
+  margin: 0 auto;
 }
