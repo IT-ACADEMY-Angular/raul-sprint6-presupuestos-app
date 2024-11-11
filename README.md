@@ -51,3 +51,9 @@ $ ng serve -o
 - He creado la maquetación con Bootstrap, para practicarlo y hasta que punto podía llegar esta herramienta (sorprendido!).
 - He querido que toda la lógica estuviese en el servicio, para así llamar a las funciones en los componentes, buenas prácticas.
 - Apartado de validaciones, es lo que mas me ha costado, son complejas. En el apartado de añadir páginas/idiomas.
+- EJERCICIO 4: lanzar este comando para ver los test:
+
+```bash
+$ ng test --include='**/budget.service.spec.ts'
+```
+

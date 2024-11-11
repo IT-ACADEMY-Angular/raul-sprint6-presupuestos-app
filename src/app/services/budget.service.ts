@@ -34,7 +34,7 @@ export class BudgetService {
       const languages = Number(numLanguages) || 0;
       const additionalPrice = pages > 0 || languages > 0 ? this.calculateAdditionalPrice(pages, languages) : 0;
       this.updateTotalPrice(this.basePrice, additionalPrice);
-  });
+    });
   }
 
   loadBudgets(): Observable<CurrentBudget[]> {
