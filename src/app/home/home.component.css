@@ -39,10 +39,3 @@ input::placeholder {
   font-weight: bold;
   font-size: larger;
 }
-
-.hr-line {
-  border: none;
-  border-top: 6px dashed #868686;
-  width: 75%;
-  margin: 0 auto;
-}

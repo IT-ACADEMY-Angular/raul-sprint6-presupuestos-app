@@ -28,24 +28,24 @@
 </form>
 
 <div class="w-75 m-auto text-end">
-  <p class="main-title">Preu pressuposat: <span class="ms-5">{{ selectedPrices }}</span><span class="fs-4"> €</span></p>
+  <p class="main-title">Preu pressuposat: <span class="ms-5">{{ selectedPrices$ | async }}</span><span class="fs-4"> €</span></p>
 </div>
 
-<form>
+<form [formGroup]="inProcessBudget" (ngSubmit)="inProcessBudgetForm()">
   <div class="main-container m-auto my-5 pb-5">
     <div class="mt-4 py-5 px-4 rounded-5 w-75 m-auto shadow position-relative">
       <div class="main-title px-3 mb-4 text-start pb-2">Pedir presupuesto</div>
       <div class="row g-3 pb-4 px-3">
         <div class="col-md-3">
-          <input type="text" id="nombre" placeholder="Nombre"
+          <input type="text" formControlName="nombre" placeholder="Nombre"
             class="form-control border rounded-3 text-start py-2">
         </div>
         <div class="col-md-3">
-          <input type="text" id="telefono" placeholder="Teléfono"
+          <input type="text" formControlName="telefono" placeholder="Teléfono"
             class="form-control border rounded-3 text-start py-2">
         </div>
         <div class="col-md-3">
-          <input type="email" id="email" placeholder="Email"
+          <input type="email" formControlName="email" placeholder="Email"
             class="form-control border rounded-3 text-start py-2">
         </div>
         <div class="col-md-3 d-flex align-items-center">
@@ -56,4 +56,5 @@
   </div>
 </form>
 
-<hr class="w-75 hr-line py-5">
+
+<budgets-list-component></budgets-list-component>

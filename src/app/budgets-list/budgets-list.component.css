@@ -1,0 +1,34 @@
+.price-title {
+    font-weight: bolder;
+    font-size: 60px;
+    margin: 0;
+}
+
+.main-title {
+    font-weight: bolder;
+    font-size: 40px;
+    margin: 0;
+}
+
+.main-text {
+    font-size: 20px;
+    font-weight: bold;
+    color: #585858;
+    margin: 0;
+}
+
+.user-text {
+    font-size: 20px;
+    font-weight: bold;
+    color: #a8a8a8;
+    margin: 0;
+}
+
+
+.hr-line {
+    border: none;
+    border-top: 6px dashed #868686;
+    width: 75%;
+    margin: 0 auto;
+  }
+  

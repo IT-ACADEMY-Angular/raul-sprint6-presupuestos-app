@@ -8,7 +8,10 @@ export interface CurrentBudget {
 
 export interface InProgressBudget {
     name: string;
-    mail: string;
-    phone: number;
+    email: string;
+    phone: string;
     items: CurrentBudget[];
-}
+    pagesQuantity: number;
+    languagesQuantity: number;
+    total: number;
+  }

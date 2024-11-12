@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { CurrentBudget } from '../models/budget';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { CurrentBudget, InProgressBudget } from '../models/budget';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import jsonData from '../../assets/data/budgets.json'
 import { CustomValidators } from '../shared/validations';
@@ -12,18 +12,24 @@ import { CustomValidators } from '../shared/validations';
 export class BudgetService {
 
   private budgetData: CurrentBudget[] = jsonData;
+  private budgetRequests: InProgressBudget[] = [];
 
-  private selectedPricesSubject = new BehaviorSubject<number>(0);
-  selectedPrices$ = this.selectedPricesSubject.asObservable();
-
+  selectedPrices$ = new BehaviorSubject<number>(0);
   private showPanelIndexSubject = new BehaviorSubject<number | null>(null);
   showPanelIndex$ = this.showPanelIndexSubject.asObservable();
 
+  inProcessBudget: FormGroup;
+  budgetForm: FormGroup;
   pagesAndLanguagesForm: FormGroup;
-
   private basePrice: number = 0;
 
   constructor(private fb: FormBuilder) {
+    this.budgetForm = this.createBudgetForm();
+    this.inProcessBudget = this.fb.group({
+      nombre: ['', Validators.required],
+      telefono: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]]
+    });
     this.pagesAndLanguagesForm = this.fb.group({
       numPages: [1, [CustomValidators.onlyNumbers(), CustomValidators.minimumValue(1)]],
       numLanguages: [1, [CustomValidators.onlyNumbers(), CustomValidators.minimumValue(1)]]
@@ -35,26 +41,13 @@ export class BudgetService {
       const additionalPrice = pages > 0 || languages > 0 ? this.calculateAdditionalPrice(pages, languages) : 0;
       this.updateTotalPrice(this.basePrice, additionalPrice);
     });
-  }
 
-  loadBudgets(): Observable<CurrentBudget[]> {
-    return of(this.budgetData).pipe(
-      tap(data => {
-        this.budgetData = data;
-      })
-    );
-  }
-
-  createBudgetForm(): FormGroup {
-    const budgetsArray = this.fb.array(this.budgetData.map(() => this.fb.control(false)));
-
-    budgetsArray.valueChanges.subscribe((checkedStates: (boolean | null)[]) => {
+    this.budgetForm.get('budgetsArray')?.valueChanges.subscribe((checkedStates: (boolean | null)[]) => {
       this.basePrice = this.calculateSelectedPrices(checkedStates);
       const additionalPrice = this.calculateAdditionalPrice(
         this.pagesAndLanguagesForm.get('numPages')!.value,
         this.pagesAndLanguagesForm.get('numLanguages')!.value
       );
-
       const webIndex = this.budgetData.findIndex(b => b.name === 'Desarrollo (WEB)');
       const webSelected = checkedStates[webIndex] ?? false;
 
@@ -65,10 +58,48 @@ export class BudgetService {
       this.updateTotalPrice(this.basePrice, webSelected ? additionalPrice : 0);
       this.showPanelIndexSubject.next(webSelected ? webIndex : null);
     });
+  }
 
+  loadBudgets(): Observable<CurrentBudget[]> {
+    return of(this.budgetData).pipe(
+      tap(data => {
+        this.budgetData = data;
+      })
+    );
+  }
+
+  private createBudgetForm(): FormGroup {
+    const budgetsArray = this.fb.array(this.budgetData.map(() => this.fb.control(false)));
     return this.fb.group({
       budgetsArray
     });
+  }
+
+  saveBudgetRequest(): void {
+    if (this.inProcessBudget.valid && this.budgetForm.valid) {
+      const selectedServices = this.budgetData
+        .filter((_, i) => this.budgetForm.get('budgetsArray')?.value[i])
+        .map(budget => budget);
+
+      const newBudgetRequest: InProgressBudget = {
+        name: this.inProcessBudget.value.nombre,
+        phone: this.inProcessBudget.value.telefono,
+        email: this.inProcessBudget.value.email,
+        items: selectedServices,
+        pagesQuantity: this.pagesAndLanguagesForm.get('numPages')?.value,
+        languagesQuantity: this.pagesAndLanguagesForm.get('numLanguages')?.value,
+        total: this.selectedPrices$.getValue()
+      };
+
+      this.budgetRequests.push(newBudgetRequest);
+      console.log('Solicitud de presupuesto guardada:', newBudgetRequest); //presupuesto guardado
+      console.log('Contenido actual de budgetRequests:', this.budgetRequests); //todo el array actualizado
+      this.resetForms();
+    }
+  }
+
+  getBudgetRequests(): InProgressBudget[] {
+    return this.budgetRequests;
   }
 
   private calculateSelectedPrices(checkedStates: (boolean | null)[]): number {
@@ -82,7 +113,7 @@ export class BudgetService {
   }
 
   private updateTotalPrice(basePrice: number, additionalPrice: number) {
-    this.selectedPricesSubject.next(basePrice + additionalPrice);
+    this.selectedPrices$.next(basePrice + additionalPrice);
   }
 
   private resetAdditionalOptions() {
@@ -112,6 +143,15 @@ export class BudgetService {
     if (current > 1) {
       this.pagesAndLanguagesForm.get('numLanguages')?.setValue(current - 1);
     }
+  }
+
+  private resetForms() {
+    this.inProcessBudget.reset();
+    this.budgetForm.reset();
+    this.pagesAndLanguagesForm.reset({
+      numPages: 0,
+      numLanguages: 0
+    });
   }
 
 }
