@@ -56,5 +56,5 @@
   </div>
 </form>
 
-
-<budgets-list-component></budgets-list-component>
+<budgets-list-component *ngIf="budgetRequestsSignal().length > 0" [budgetRequests]="budgetRequestsSignal()">
+</budgets-list-component>

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Signal } from '@angular/core';
 import { WelcomeComponent } from '../welcome/welcome.component';
-import { CurrentBudget } from '../models/budget';
+import { CurrentBudget, InProgressBudget } from '../models/budget';
 import { BudgetService } from '../services/budget.service';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -21,12 +21,15 @@ export class HomeComponent implements OnInit {
   inProcessBudget: FormGroup;
   selectedPrices$: Observable<number>;
   showPanelIndex$: Observable<number | null>;
+  budgetRequestsSignal: Signal<InProgressBudget[]>;
 
   constructor(private budgetService: BudgetService) {
     this.budgetForm = this.budgetService.budgetForm;
     this.inProcessBudget = this.budgetService.inProcessBudget;
     this.selectedPrices$ = this.budgetService.selectedPrices$;
     this.showPanelIndex$ = this.budgetService.showPanelIndex$;
+    this.budgetRequestsSignal = this.budgetService.getBudgetRequestsSignal();
+
   }
 
   ngOnInit(): void {

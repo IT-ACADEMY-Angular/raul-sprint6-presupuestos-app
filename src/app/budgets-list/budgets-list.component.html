@@ -1,30 +1,39 @@
 <hr class="w-75 hr-line py-5">
 
-<div class="m-auto w-75 main-title text-start ">Presupuestos en curso</div>
+<div class="m-auto w-75 main-title text-start mb-5">Presupuestos en curso</div>
 
+<div *ngFor="let request of budgetRequests" class="main-container m-auto mb-4">
+  <div class="content-container py-5 px-4 rounded-5 w-75 m-auto shadow position-relative">
+    <div class="row">
+      <div class="col-md-4 d-flex flex-column justify-content-center">
+        <div class="main-title px-4">{{ request.name | titlecase }}</div>
+        <div class="user-text px-4 pb-1">{{ request.email }}</div>
+        <div class="user-text px-4">{{ request.phone }}</div>
+      </div>
 
-    <div class="main-container m-auto my-5 pb-5">
-        <div class="content-container mt-4 py-5 px-4 rounded-5 w-75 m-auto shadow position-relative">
-            <div class="row">
-                <div class="col-md-4 d-flex flex-column justify-content-center">
-                    <div class="main-title px-4">Nombre</div>
-                    <div class="user-text px-4 pb-1 ">exaaaaample&#64;gmail.com</div>
-                    <div class="user-text px-4">999 999 999</div>
-                </div>
+      <div class="col-md-4 d-flex flex-column justify-content-center">
+        <div class="main-text pb-1">Servicios contratados:</div>
+        <ul>
+          <li *ngFor="let item of request.items" class="main-text pb-1">
+            {{ item.name }}
+            <ng-container *ngIf="item.name === 'Desarrollo (WEB)'">
+              (
+              {{ request.pagesQuantity }}
+              {{ request.pagesQuantity === 1 ? 'página' : 'páginas' }},
+              {{ request.languagesQuantity }}
+              {{ request.languagesQuantity === 1 ? 'idioma' : 'idiomas' }}
+              )
+            </ng-container>
+          </li>
+        </ul>
+      </div>
 
-                <div class="col-md-4 d-flex flex-column justify-content-center">
-                    <div class="main-text pb-1">Servicios contratados</div>
-                    <li class="main-text pb-1">Web (4 paginas, 5 idiomas)</li>
-                    <li class="main-text">SEO</li>
-                </div>
-                
-                <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
-                    <div class="user-text">Total:</div>
-                    <div class="price-container">
-                        <p class="m-0 price-title">500 <span class="fs-4"> €</span></p>
-                    </div>
-                </div>
-            </div>
+      <div class="col-md-4 d-flex flex-column justify-content-center align-items-center">
+        <div class="user-text">Total:</div>
+        <div class="price-container">
+          <p class="m-0 price-title">{{ request.total }} <span class="fs-4">€</span></p>
         </div>
+      </div>
     </div>
-
+  </div>
+</div>

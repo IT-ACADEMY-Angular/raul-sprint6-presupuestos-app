@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, Signal } from '@angular/core';
 import { CurrentBudget, InProgressBudget } from '../models/budget';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, of, tap } from 'rxjs';
@@ -13,6 +13,7 @@ export class BudgetService {
 
   private budgetData: CurrentBudget[] = jsonData;
   private budgetRequests: InProgressBudget[] = [];
+  budgetRequestsSignal = signal<InProgressBudget[]>([]);
 
   selectedPrices$ = new BehaviorSubject<number>(0);
   private showPanelIndexSubject = new BehaviorSubject<number | null>(null);
@@ -92,14 +93,13 @@ export class BudgetService {
       };
 
       this.budgetRequests.push(newBudgetRequest);
-      console.log('Solicitud de presupuesto guardada:', newBudgetRequest); //presupuesto guardado
-      console.log('Contenido actual de budgetRequests:', this.budgetRequests); //todo el array actualizado
+      this.budgetRequestsSignal.set([...this.budgetRequests]);
       this.resetForms();
     }
   }
 
-  getBudgetRequests(): InProgressBudget[] {
-    return this.budgetRequests;
+  getBudgetRequestsSignal(): Signal<InProgressBudget[]> {
+    return this.budgetRequestsSignal;
   }
 
   private calculateSelectedPrices(checkedStates: (boolean | null)[]): number {
@@ -149,9 +149,10 @@ export class BudgetService {
     this.inProcessBudget.reset();
     this.budgetForm.reset();
     this.pagesAndLanguagesForm.reset({
-      numPages: 0,
-      numLanguages: 0
+      numPages: 1,
+      numLanguages: 1
     });
+    this.selectedPrices$.next(0);
+    this.basePrice = 0;
   }
-
 }
