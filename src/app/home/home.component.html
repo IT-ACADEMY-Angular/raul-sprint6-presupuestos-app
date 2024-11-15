@@ -28,7 +28,8 @@
 </form>
 
 <div class="w-75 m-auto text-end">
-  <p class="main-title">Preu pressuposat: <span class="ms-5">{{ selectedPrices$ | async }}</span><span class="fs-4"> €</span></p>
+  <p class="main-title">Precio presupuesto: <span class="ms-5">{{ selectedPrices$ | async }}</span><span class="fs-4">
+      €</span></p>
 </div>
 
 <form [formGroup]="inProcessBudget" (ngSubmit)="inProcessBudgetForm()">
@@ -49,7 +50,8 @@
             class="form-control border rounded-3 text-start py-2">
         </div>
         <div class="col-md-3 d-flex align-items-center">
-          <button type="submit" class="btn btn-success w-100 ms-3 presupuesto-text">Solicitar presupuesto &rarr;</button>
+          <button type="submit" class="btn btn-success w-100 ms-3 presupuesto-text">Solicitar presupuesto
+            &rarr;</button>
         </div>
       </div>
     </div>

@@ -89,7 +89,8 @@ export class BudgetService {
         items: selectedServices,
         pagesQuantity: this.pagesAndLanguagesForm.get('numPages')?.value,
         languagesQuantity: this.pagesAndLanguagesForm.get('numLanguages')?.value,
-        total: this.selectedPrices$.getValue()
+        total: this.selectedPrices$.getValue(),
+        date: new Date().toISOString()
       };
 
       this.budgetRequests.push(newBudgetRequest);
