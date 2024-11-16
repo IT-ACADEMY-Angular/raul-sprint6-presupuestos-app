@@ -3,7 +3,16 @@
 <div class="m-auto w-75 main-title text-start mb-5">Presupuestos en curso</div>
 
 <div class="d-flex justify-content-end align-items-center mb-4 m-auto w-75">
+
   <div class="btn-group">
+    <button type="button" class="btn text-decoration-none border-0 px-3"
+      [ngClass]="{'main-text': showSearchBox, 'user-text': !showSearchBox}" (click)="toggleSearchBox()">
+      <i class="bi bi-search"></i>
+    </button>
+
+    <input *ngIf="showSearchBox" type="text" class="form-control form-control-sm me-3 rounded-3"
+      placeholder="Buscar por nombre..." [(ngModel)]="searchText" (input)="onSearchChange()" />
+
     <button type="button" class="btn text-decoration-none border-0 px-3"
       [ngClass]="currentSort === 'date' ? 'filter-text' : 'user-text'" (click)="sortBudgets('date')">
       <span class="d-inline-flex align-items-center">
@@ -12,6 +21,7 @@
           [ngClass]="currentSort === 'date' ? (sortDirection === 'asc' ? 'bi bi-caret-up' : 'bi bi-caret-down') : 'bi bi-caret-up invisible'"></i>
       </span>
     </button>
+
     <button type="button" class="btn text-decoration-none border-0 px-3"
       [ngClass]="currentSort === 'total' ? 'filter-text' : 'user-text'" (click)="sortBudgets('total')">
       <span class="d-inline-flex align-items-center">
@@ -20,6 +30,7 @@
           [ngClass]="currentSort === 'total' ? (sortDirection === 'asc' ? 'bi bi-caret-up' : 'bi bi-caret-down') : 'bi bi-caret-up invisible'"></i>
       </span>
     </button>
+
     <button type="button" class="btn text-decoration-none border-0 px-3 pe-3"
       [ngClass]="currentSort === 'name' ? 'filter-text' : 'user-text'" (click)="sortBudgets('name')">
       <span class="d-inline-flex align-items-center">
@@ -28,13 +39,14 @@
           [ngClass]="currentSort === 'name' ? (sortDirection === 'asc' ? 'bi bi-caret-up' : 'bi bi-caret-down') : 'bi bi-caret-up invisible'"></i>
       </span>
     </button>
+
   </div>
 </div>
 
-
-<div *ngFor="let request of budgetRequests" class="main-container m-auto mb-4">
+<div *ngFor="let request of filteredBudgetRequests" class="main-container m-auto mb-4">
   <div class="content-container py-5 px-4 rounded-5 w-75 m-auto shadow position-relative">
     <div class="row">
+
       <div class="col-md-4 d-flex flex-column justify-content-center">
         <div class="main-title px-4">{{ request.name | titlecase }}</div>
         <div class="user-text px-4 pb-1">{{ request.email }}</div>
@@ -64,6 +76,7 @@
           <p class="m-0 price-title">{{ request.total }} <span class="fs-4">€</span></p>
         </div>
       </div>
+
     </div>
   </div>
 </div>
