@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import jsonData from '../../assets/data/budgets.json'
 import { CustomValidators } from '../shared/validations';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class BudgetService {
   pagesAndLanguagesForm: FormGroup;
   private basePrice: number = 0;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute) {
     this.budgetForm = this.createBudgetForm();
     this.inProcessBudget = this.fb.group({
       nombre: ['', Validators.required],
@@ -36,11 +37,14 @@ export class BudgetService {
       numLanguages: [1, [CustomValidators.onlyNumbers(), CustomValidators.minimumValue(1)]]
     });
 
+    this.syncFormsWithUrl();
+
     this.pagesAndLanguagesForm.valueChanges.subscribe(({ numPages, numLanguages }) => {
       const pages = Number(numPages) || 0;
       const languages = Number(numLanguages) || 0;
       const additionalPrice = pages > 0 || languages > 0 ? this.calculateAdditionalPrice(pages, languages) : 0;
       this.updateTotalPrice(this.basePrice, additionalPrice);
+      this.updateUrl();
     });
 
     this.budgetForm.get('budgetsArray')?.valueChanges.subscribe((checkedStates: (boolean | null)[]) => {
@@ -58,6 +62,7 @@ export class BudgetService {
 
       this.updateTotalPrice(this.basePrice, webSelected ? additionalPrice : 0);
       this.showPanelIndexSubject.next(webSelected ? webIndex : null);
+      this.updateUrl();
     });
   }
 
@@ -155,5 +160,63 @@ export class BudgetService {
     });
     this.selectedPrices$.next(0);
     this.basePrice = 0;
+  }
+
+  private syncFormsWithUrl(): void {
+    this.route.queryParams.subscribe((queryParams) => {
+
+      const budgetsArray = this.budgetData.map(budget => {
+        const key = budget.name.replace(/\s+/g, '');
+        return queryParams[key] ? true : false;
+      });
+
+      this.budgetForm.get('budgetsArray')?.setValue(budgetsArray, { emitEvent: false });
+
+      const webIndex = this.budgetData.findIndex(b => b.name === 'Desarrollo (WEB)');
+
+      if (queryParams['pages'] && queryParams['lang'] && budgetsArray[webIndex]) {
+        this.pagesAndLanguagesForm.get('numPages')?.setValue(Number(queryParams['pages']), { emitEvent: false });
+        this.pagesAndLanguagesForm.get('numLanguages')?.setValue(Number(queryParams['lang']), { emitEvent: false });
+      }
+
+      const checkedStates = this.budgetForm.get('budgetsArray')?.value;
+
+      this.basePrice = this.calculateSelectedPrices(checkedStates);
+
+      const additionalPrice = this.calculateAdditionalPrice(
+        this.pagesAndLanguagesForm.get('numPages')!.value,
+        this.pagesAndLanguagesForm.get('numLanguages')!.value
+      );
+
+      const webSelected = budgetsArray[webIndex] ?? false;
+
+      this.updateTotalPrice(this.basePrice, webSelected ? additionalPrice : 0);
+      this.showPanelIndexSubject.next(webSelected ? webIndex : null);
+    });
+  }
+
+  private updateUrl(): void {
+    const queryParams: any = {};
+    const checkedStates = this.budgetForm.get('budgetsArray')?.value;
+
+    this.budgetData.forEach((budget, index) => {
+      if (checkedStates[index]) {
+        const key = budget.name.replace(/\s+/g, '');
+        queryParams[key] = true;
+      }
+    });
+
+    const webIndex = this.budgetData.findIndex(b => b.name === 'Desarrollo (WEB)');
+    const webSelected = checkedStates[webIndex] ?? false;
+    if (webSelected) {
+      queryParams['pages'] = this.pagesAndLanguagesForm.get('numPages')?.value || 1;
+      queryParams['lang'] = this.pagesAndLanguagesForm.get('numLanguages')?.value || 1;
+    }
+
+    this.router.navigate([], {
+      queryParams,
+      queryParamsHandling: '',
+      replaceUrl: true
+    });
   }
 }
