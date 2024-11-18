@@ -37,26 +37,53 @@
     <div class="mt-4 py-5 px-4 rounded-5 w-75 m-auto shadow position-relative">
       <div class="main-title px-3 mb-4 text-start pb-2">Pedir presupuesto</div>
       <div class="row g-3 pb-4 px-3">
+
         <div class="col-md-3">
           <input type="text" formControlName="nombre" placeholder="Nombre"
-            class="form-control border rounded-3 text-start py-2">
+            class="form-control border rounded-3 text-start py-2" />
+          <div *ngIf="inProcessBudget.get('nombre')?.touched && inProcessBudget.get('nombre')?.invalid"
+            class="text-danger mt-1">
+            <small *ngIf="inProcessBudget.get('nombre')?.errors?.['required']">El nombre es obligatorio. </small>
+            <small *ngIf="inProcessBudget.get('nombre')?.errors?.['minlength']">Debe tener al menos 3 caracteres.
+            </small>
+            <small *ngIf="inProcessBudget.get('nombre')?.errors?.['onlyLetters']">Solo se permiten letras. </small>
+          </div>
         </div>
+
         <div class="col-md-3">
           <input type="text" formControlName="telefono" placeholder="Teléfono"
-            class="form-control border rounded-3 text-start py-2">
+            class="form-control border rounded-3 text-start py-2" />
+          <div *ngIf="inProcessBudget.get('telefono')?.touched && inProcessBudget.get('telefono')?.invalid"
+            class="text-danger mt-1">
+            <small *ngIf="inProcessBudget.get('telefono')?.errors?.['required']">El teléfono es obligatorio. </small>
+            <small *ngIf="inProcessBudget.get('telefono')?.errors?.['minlength']">Debe tener al menos 9 números.
+            </small>
+            <small *ngIf="inProcessBudget.get('telefono')?.errors?.['onlyNumbers']">Solo se permiten números. </small>
+          </div>
         </div>
+
         <div class="col-md-3">
           <input type="email" formControlName="email" placeholder="Email"
-            class="form-control border rounded-3 text-start py-2">
+            class="form-control border rounded-3 text-start py-2" />
+          <div *ngIf="inProcessBudget.get('email')?.touched && inProcessBudget.get('email')?.invalid"
+            class="text-danger mt-1">
+            <small *ngIf="inProcessBudget.get('email')?.errors?.['required']">El email es obligatorio. </small>
+            <small *ngIf="inProcessBudget.get('email')?.errors?.['email']">La composicion del mail debe ser correcta,
+              EJ: mail&#64;mail.com. </small>
+          </div>
         </div>
+
         <div class="col-md-3 d-flex align-items-center">
-          <button type="submit" class="btn btn-success w-100 ms-3 presupuesto-text">Solicitar presupuesto
-            &rarr;</button>
+          <button type="submit" class="btn btn-success w-100 ms-3 presupuesto-text"
+            [disabled]="inProcessBudget.invalid">
+            Solicitar presupuesto &rarr;
+          </button>
         </div>
       </div>
     </div>
   </div>
 </form>
+
 
 <budgets-list-component *ngIf="budgetRequestsSignal().length > 0" [budgetRequests]="budgetRequestsSignal()">
 </budgets-list-component>

@@ -28,8 +28,8 @@ export class BudgetService {
   constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute) {
     this.budgetForm = this.createBudgetForm();
     this.inProcessBudget = this.fb.group({
-      nombre: ['', Validators.required],
-      telefono: ['', Validators.required],
+      nombre: ['', [Validators.required, Validators.minLength(3), CustomValidators.onlyLetters()]],
+      telefono: ['', [Validators.required, Validators.minLength(9), CustomValidators.onlyNumbers()]],
       email: ['', [Validators.required, Validators.email]]
     });
     this.pagesAndLanguagesForm = this.fb.group({
@@ -163,37 +163,70 @@ export class BudgetService {
   }
 
   private syncFormsWithUrl(): void {
-    this.route.queryParams.subscribe((queryParams) => {
+    let skipInitialSync = true;
 
-      const budgetsArray = this.budgetData.map(budget => {
-        const key = budget.name.replace(/\s+/g, '');
-        return queryParams[key] ? true : false;
-      });
+    this.route.queryParams.subscribe((queryParams) => {
+      if (skipInitialSync) {
+
+        this.router.navigate([], {
+          queryParams: null,
+          replaceUrl: true
+        });
+
+        const budgetsArray = this.budgetData.map(() => false);
+        this.budgetForm.get('budgetsArray')?.setValue(budgetsArray, { emitEvent: false });
+
+        this.pagesAndLanguagesForm.reset({
+          numPages: 1,
+          numLanguages: 1
+        }, { emitEvent: false });
+
+        this.basePrice = 0;
+        this.updateTotalPrice(0, 0);
+        this.showPanelIndexSubject.next(null);
+
+        skipInitialSync = false;
+        return;
+      }
+
+      const budgetsArray = this.budgetData.map(() => false);
+      const hasParams = Object.keys(queryParams).length > 0;
+
+      if (hasParams) {
+        this.budgetData.forEach((budget, index) => {
+          const key = budget.name.replace(/\s+/g, '');
+          budgetsArray[index] = queryParams[key] ? true : false;
+        });
+
+        const webIndex = this.budgetData.findIndex(b => b.name === 'Desarrollo (WEB)');
+        if (queryParams['pages'] && queryParams['lang'] && budgetsArray[webIndex]) {
+          this.pagesAndLanguagesForm.get('numPages')?.setValue(Number(queryParams['pages']), { emitEvent: false });
+          this.pagesAndLanguagesForm.get('numLanguages')?.setValue(Number(queryParams['lang']), { emitEvent: false });
+        }
+      }
 
       this.budgetForm.get('budgetsArray')?.setValue(budgetsArray, { emitEvent: false });
 
       const webIndex = this.budgetData.findIndex(b => b.name === 'Desarrollo (WEB)');
-
-      if (queryParams['pages'] && queryParams['lang'] && budgetsArray[webIndex]) {
-        this.pagesAndLanguagesForm.get('numPages')?.setValue(Number(queryParams['pages']), { emitEvent: false });
-        this.pagesAndLanguagesForm.get('numLanguages')?.setValue(Number(queryParams['lang']), { emitEvent: false });
+      if (!hasParams || !budgetsArray[webIndex]) {
+        this.pagesAndLanguagesForm.reset({
+          numPages: 1,
+          numLanguages: 1
+        }, { emitEvent: false });
       }
 
-      const checkedStates = this.budgetForm.get('budgetsArray')?.value;
-
-      this.basePrice = this.calculateSelectedPrices(checkedStates);
-
+      this.basePrice = this.calculateSelectedPrices(budgetsArray);
       const additionalPrice = this.calculateAdditionalPrice(
         this.pagesAndLanguagesForm.get('numPages')!.value,
         this.pagesAndLanguagesForm.get('numLanguages')!.value
       );
-
       const webSelected = budgetsArray[webIndex] ?? false;
 
       this.updateTotalPrice(this.basePrice, webSelected ? additionalPrice : 0);
       this.showPanelIndexSubject.next(webSelected ? webIndex : null);
     });
   }
+
 
   private updateUrl(): void {
     const queryParams: any = {};
@@ -213,10 +246,17 @@ export class BudgetService {
       queryParams['lang'] = this.pagesAndLanguagesForm.get('numLanguages')?.value || 1;
     }
 
-    this.router.navigate([], {
-      queryParams,
-      queryParamsHandling: '',
-      replaceUrl: true
-    });
+    if (Object.keys(queryParams).length === 0) {
+      this.router.navigate([], {
+        queryParams: null,
+        replaceUrl: true
+      });
+    } else {
+      this.router.navigate([], {
+        queryParams,
+        queryParamsHandling: '',
+        replaceUrl: true
+      });
+    }
   }
 }

@@ -42,15 +42,18 @@ $ ng serve -o
 - HTML
 - CSS
 - RXJS
+- Signals
+- Validators
+- Router
 - ReactiveForms
 
 ## ✨ Características
 
 - Cada ejercicio está en un commit.
-- Completados todos los ejercicios que se pedían.
-- He creado la maquetación con Bootstrap, para practicarlo y hasta que punto podía llegar esta herramienta (sorprendido!).
-- He querido que toda la lógica estuviese en el servicio, para así llamar a las funciones en los componentes, buenas prácticas.
-- Apartado de validaciones, es lo que mas me ha costado, son complejas. En el apartado de añadir páginas/idiomas.
+- Completados todos los ejercicios que se pedían + 1 extra al final.
+- He creado la maquetación FULL con Bootstrap, para practicarlo y hasta que punto podía llegar esta herramienta (sorprendido!).
+- He querido que toda la lógica estuviese en el servicio, para así llamar a las funciones en los componentes, buenas prácticas. (menos alguna cosa de budget-list que me dio problemas).
+- En el apartado de añadir páginas/idiomas, hablando de validaciones, es lo que mas me ha costado, son complejas.
 - EJERCICIO 4: lanzar este comando para ver los test:
 
 ```bash

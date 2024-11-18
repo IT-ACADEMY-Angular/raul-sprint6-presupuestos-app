@@ -37,6 +37,10 @@ export class HomeComponent implements OnInit {
   }
 
   inProcessBudgetForm(): void {
+    if (this.inProcessBudget.invalid) {
+      this.inProcessBudget.markAllAsTouched();
+      return;
+    }
     this.budgetService.saveBudgetRequest();
   }
 }

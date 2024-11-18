@@ -32,4 +32,12 @@ export class CustomValidators {
       input.value = '1';
     }
   }
+
+  //validar que solo se pongan letras
+  static onlyLetters(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const valid = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(control.value);
+      return valid ? null : { onlyLetters: true };
+    };
+  }
 }
